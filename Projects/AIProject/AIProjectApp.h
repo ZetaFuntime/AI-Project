@@ -44,4 +44,8 @@ protected:
 	aie::Texture	*m_agentTex = nullptr;
 	
 	Graph2DRenderer *m_graphRenderer;
+
+	float m_timer;
+	float randX;
+	float randY;
 };

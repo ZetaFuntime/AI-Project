@@ -23,24 +23,20 @@ Agent::Agent(aie::Texture *tex) :
 	m_graph(nullptr)
 {
 	m_keyboardBehaviour = new KeyboardBehaviour();
-	m_keyboardBehaviour->IsOwnedByGameObject(false);
 
 	m_seekBehaviour = new SeekBehaviour();
-	m_seekBehaviour->IsOwnedByGameObject(false);
 	m_seekBehaviour->OnOuterRadiusEnter([this]() {
 		m_arrivalBehaviour->SetTarget(m_seekBehaviour->GetTarget());
 		SetBehaviour(m_arrivalBehaviour);
 	});
 
 	m_fleeBehaviour = new SeekBehaviour();
-	m_fleeBehaviour->IsOwnedByGameObject(false);
 	m_fleeBehaviour->SetForceStrength(-100);
 	m_fleeBehaviour->OnOuterRadiusExit([this]() {
 		SetBehaviour(m_wanderBehaviour);
 	});
 
 	m_arrivalBehaviour = new ArrivalBehaviour();
-	m_arrivalBehaviour->IsOwnedByGameObject(false);
 	m_arrivalBehaviour->OnTargetRadiusEnter([this]() {
 		SetBehaviour(m_keyboardBehaviour);
 	});
@@ -48,13 +44,9 @@ Agent::Agent(aie::Texture *tex) :
 	m_path = new Path();
 
 	m_followPathBehaviour = new FollowPathBehaviour();
-	m_followPathBehaviour->IsOwnedByGameObject(false);
 	m_followPathBehaviour->SetPath(m_path);
 
 	m_wanderBehaviour = new WanderBehaviour();
-	m_wanderBehaviour->IsOwnedByGameObject(false);
-
-	SetBehaviour(new KeyboardBehaviour());
 
 	SetFriction(1.0f);
 
@@ -152,6 +144,7 @@ void Agent::Update(float deltaTime)
 	{
 		SetDraw(true);
 	}
+
 	if (input->wasKeyPressed(aie::INPUT_KEY_DOWN))
 	{
 		SetDraw(false);

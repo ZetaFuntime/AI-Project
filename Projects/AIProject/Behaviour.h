@@ -17,8 +17,8 @@ public:
 	virtual void Update(GameObject * object, float deltaTime) { }
 	virtual void Draw(GameObject *object, aie::Renderer2D *renderer) { }
 
-	bool IsOwnedByGameObject() { return m_isOwned; }
-	void IsOwnedByGameObject(bool isOwned) { m_isOwned = isOwned; }
+	bool IsCompleted() { return m_isOwned; }
+	void IsCompleted(bool isOwned) { m_isOwned = isOwned; }
 
 	bool IsDrawnByGameObject() { return m_isDrawn; }
 	void UpdateDrawnByGameObject(bool isDrawn) { m_isDrawn = isDrawn; }

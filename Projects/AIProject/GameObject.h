@@ -1,6 +1,8 @@
 #pragma once
+#include "Behaviour.h"
 #include <glm\vec2.hpp>
-
+#include <vector>
+#include <map>
 namespace aie
 {
 	class Renderer2D;
@@ -15,8 +17,6 @@ enum ColourPalette
 	PURPLE = 0x7411E3FF, WHITE = 0xFFFFFFFF, 
 	PINK = 0xFA22EA, DARKBLUE = 0x012345FF
 };
-
-class Behaviour;
 
 class GameObject
 {
@@ -40,7 +40,6 @@ public:
 	void SetPosition(const glm::vec2 &pos);
 	void SetVelocity(const glm::vec2 &vel);
 	void SetFriction(float friction);
-	void SetBehaviour(Behaviour *behaviour);
 	void SetSize(float size);
 	void SetDraw(bool draw);
 	void SetColour(int id);
@@ -58,7 +57,6 @@ public:
 	const glm::vec2 & GetPosition();
 	const glm::vec2 & GetVelocity();
 	float GetFriction();
-	Behaviour *GetBehaviour();
 
 #pragma endregion
 
@@ -70,12 +68,15 @@ protected:
 	glm::vec2 m_acceleration;
 
 	bool isDrawn;
+	bool m_completion;
 	float m_rotation;
 	float m_friction;
 	float m_size;
 
 	aie::Texture	*m_tex;
-	Behaviour		*m_behaviour;
+
+	std::map<const char*, Behaviour*>		m_behaviours;
+	std::vector<Behaviour*>					m_activeBehaviours;
 
 private:
 };

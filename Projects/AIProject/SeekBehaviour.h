@@ -38,6 +38,7 @@ public:
 protected:
 
 	glm::vec2 m_targetPosition;
+
 	float m_forceStrength;
 	float m_predictionTiming;
 
@@ -53,7 +54,6 @@ private:
 
 	glm::vec2 m_lastPosition;
 
-	void ResetSeekAndPursuit();
 	void SeekCalculation();
 	void PursuitCalculation();
 };

@@ -29,12 +29,25 @@ void ArrivalBehaviour::Update(GameObject *object, float deltaTime)
 	// --------------------------------------------------------------
 	// If the agent is outside the slowing radius, don't slow it down
 	// --------------------------------------------------------------
+
 	float slowRatio = (distanceToTarget < m_slowingRadius) ? (distanceToTarget / (m_slowingRadius)) : 1;
 
+	// --------------------------------------------------------------
+	// Calculate the current Angle to the destination compared to
+	// the current angle of the agent
+	// --------------------------------------------------------------
+
+	glm::vec2 currentDir = glm::normalize(object->GetVelocity());
+	glm::vec2 currentDirToTarget = glm::normalize(m_targetPosition - object->GetPosition());
+
+	float currentAngle = 
 	// --------------------------------------------------------------
 	// Apply a constant force to the agent which is scaled down as the
 	//			  agent gets closer to the destination.
 	// --------------------------------------------------------------
+
+
+
 	glm::vec2 currentDirToTarget = glm::normalize(m_targetPosition - object->GetPosition()) * slowRatio * m_forceStrength;
 
 	object->SetVelocity(currentDirToTarget);

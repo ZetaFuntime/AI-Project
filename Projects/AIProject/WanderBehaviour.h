@@ -13,15 +13,18 @@ public:
 	virtual void Update(GameObject *object, float deltaTime);
 	virtual void Draw(GameObject * object, aie::Renderer2D *renderer);
 
-	glm::vec2 SetAngle(float strength, float wanderAngle);
-
 protected:
 
+	float m_changeTimePassed;
 	float m_wanderAngle;
+
 	glm::vec2 m_circleCenter;
 	glm::vec2 m_displacement;
+	glm::vec2 wanderForce;
 	float m_circleRadius;
 	float m_forceStrength;
 
 private:
+
+	glm::vec2 SetAngle(GameObject * object, float strength, float wanderAngle);
 };

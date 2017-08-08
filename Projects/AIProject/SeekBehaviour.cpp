@@ -134,10 +134,6 @@ void SeekBehaviour::OnOuterRadiusExit(std::function< void() > func)
 	m_onOuterRadiusExit = func;
 }
 
-void SeekBehaviour::ResetSeekAndPursuit()
-{
-}
-
 void SeekBehaviour::SeekCalculation()
 {
 }

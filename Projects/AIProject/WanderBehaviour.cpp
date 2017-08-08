@@ -9,7 +9,8 @@
 WanderBehaviour::WanderBehaviour() :
 	Behaviour(),
 	m_circleRadius(100.f),
-	m_forceStrength(100.f)
+	m_forceStrength(50.f),
+	m_changeTimePassed(0.f)
 {
 	m_wanderAngle = ((rand() % 618) - 315) / 100.f;
 }
@@ -51,17 +52,22 @@ void WanderBehaviour::Update(GameObject *object, float deltaTime)
 	// Version 2 - Wandering algorithm based on random normalised
 	//			   vector and randomised displacement forces
 	// ----------------------------------------------------------
+	m_changeTimePassed += deltaTime;
+	
+	m_circleCenter = glm::normalize(object->GetVelocity())*m_forceStrength;
 
-	m_circleCenter = glm::normalize(object->GetVelocity());
-	m_circleCenter = glm::vec2(m_circleCenter.x*m_forceStrength,
-		m_circleCenter.y*m_forceStrength);
+	if (m_changeTimePassed > 0.5f)
+	{
+		glm::vec2 currentDir = glm::normalize(object->GetVelocity());
+		float currentAngle = atan2f(currentDir.y, currentDir.x);
+		m_wanderAngle = ((rand() % 314) - 158) / 100.f;
+		m_displacement = SetAngle(object, m_circleRadius, m_wanderAngle + currentAngle);
 
-	float prevAngle = m_wanderAngle;
-	m_wanderAngle = prevAngle + ((rand() % 314) - 158) / 100.f;
-	m_displacement = SetAngle(m_circleRadius, m_wanderAngle);
-
-	glm::vec2 wanderForce = m_circleCenter + m_displacement;
+		wanderForce = m_circleCenter + m_displacement;
+		m_changeTimePassed = 0.f;
+	}
 	object->ApplyForce(wanderForce);
+	std::cout << "WanderAngle: "<<m_wanderAngle << std::endl;
 }
 
 void WanderBehaviour::Draw(GameObject * object, aie::Renderer2D * renderer)
@@ -73,13 +79,16 @@ void WanderBehaviour::Draw(GameObject * object, aie::Renderer2D * renderer)
 		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.25f);
 		renderer->drawCircle(agentPos.x + m_circleCenter.x, agentPos.y + m_circleCenter.y, m_circleRadius);
 
+		renderer->setRenderColour(0x00000066);
+		renderer->drawCircle(agentPos.x + m_circleCenter.x, agentPos.y + m_circleCenter.y, m_circleRadius - 5.f);
+
 		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);
 		renderer->drawLine(agentPos.x, agentPos.y, agentPos.x + m_circleCenter.x, agentPos.y + m_circleCenter.y);
 		renderer->drawLine(agentPos.x, agentPos.y, agentPos.x + wanderForce.x, agentPos.y + wanderForce.y);
 	}
 }
 
-glm::vec2 WanderBehaviour::SetAngle(float strength, float wanderAngle)
+glm::vec2 WanderBehaviour::SetAngle(GameObject * object, float strength, float wanderAngle)
 {
 	glm::vec2 wanderVector;
 	wanderVector.x = strength * cos(wanderAngle);

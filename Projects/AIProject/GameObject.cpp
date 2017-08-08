@@ -5,6 +5,7 @@
 #include <Renderer2D.h>
 #include <glm\glm.hpp>
 #include <iostream>
+#include <assert.h>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -14,56 +15,19 @@ GameObject::GameObject(aie::Texture *tex) :
 	m_friction(1.0f),
 	m_rotation(0.0f),
 	m_size(20.f),
-	m_behaviour(nullptr),
 	isDrawn(true),
 	m_colour(WHITE)
 {
-	int randnum = rand() % 10;
-	switch (randnum)
-	{
-	case 1:		m_colour = BLUE;	break;
-	case 2:		m_colour = RED;		break;
-	case 3:		m_colour = YELLOW;	break;
-	case 4:		m_colour = GREEN;	break;
-	case 5:		m_colour = ORANGE;	break;
-	case 6:		m_colour = TEAL;	break;
-	case 7:		m_colour = PURPLE;	break;
-	case 8:		m_colour = PINK;	break;
-	case 9:		m_colour = WHITE;	break;
-	case 10:	m_colour = DARKBLUE;break;
-	default:	m_colour = WHITE;	break;
-	}
+
 }
 
 GameObject::~GameObject()
 {
-	SetBehaviour(nullptr);
+
 }
 
 void GameObject::Update(float deltaTime)
 {
-	//static float eye_relaxer = 0;
-	//eye_relaxer += deltaTime;
-	//if (eye_relaxer > 0.75f) {
-	//
-	//	int randnum = rand() % 10;
-	//	switch (randnum)
-	//	{
-	//	case 1:		m_colour = BLUE;	break;
-	//	case 2:		m_colour = RED;		break;
-	//	case 3:		m_colour = YELLOW;	break;
-	//	case 4:		m_colour = GREEN;	break;
-	//	case 5:		m_colour = ORANGE;	break;
-	//	case 6:		m_colour = TEAL;	break;
-	//	case 7:		m_colour = PURPLE;	break;
-	//	case 8:		m_colour = PINK;	break;
-	//	case 9:		m_colour = WHITE;	break;
-	//	default:	m_colour = WHITE;	break;
-	//	}
-	//	eye_relaxer = 0;
-	//}
-	if (m_behaviour != nullptr)
-		m_behaviour->Update(this, deltaTime);
 	SimulatePhysics(deltaTime);
 }
 
@@ -71,10 +35,7 @@ void GameObject::Draw(aie::Renderer2D * renderer)
 {
 	glm::vec2 targetHeading = m_position + m_velocity;
 
-	if (m_behaviour->IsDrawnByGameObject())
-	{
-		renderer->setRenderColour(0xFFFFFF50);
-		renderer->drawCircle(m_position.x, m_position.y, m_size / 2);
+	if (isDrawn){
 		renderer->setRenderColour(ORANGE);
 		renderer->drawLine(m_position.x, m_position.y, targetHeading.x, targetHeading.y, 2.0f);
 		renderer->setRenderColour(WHITE);
@@ -82,15 +43,13 @@ void GameObject::Draw(aie::Renderer2D * renderer)
 
 	renderer->setRenderColour(m_colour);
 	if (m_tex == nullptr) {
+		renderer->setRenderColour(m_colour);
 		renderer->drawCircle(m_position.x, m_position.y, 8);
 	} else {
 		renderer->setRenderColour(m_colour);
 		renderer->drawSprite(m_tex, m_position.x, m_position.y, m_size, m_size, m_rotation);
 		renderer->setRenderColour(WHITE);
 	}
-
-	if (m_behaviour != nullptr)
-		m_behaviour->Draw(this, renderer);
 }
 
 void GameObject::SimulatePhysics(float deltaTime)
@@ -110,7 +69,7 @@ void GameObject::ApplyForce(const glm::vec2 & force)
 
 bool GameObject::GetDraw()
 {
-	return m_behaviour->IsDrawnByGameObject();
+	return isDrawn;
 }
 
 float GameObject::GetSize()
@@ -131,11 +90,6 @@ const glm::vec2 & GameObject::GetVelocity()
 float GameObject::GetFriction()
 {
 	return m_friction;
-}
-
-Behaviour *GameObject::GetBehaviour()
-{
-	return m_behaviour;
 }
 
 void GameObject::SetTexture(aie::Texture *tex)
@@ -160,15 +114,7 @@ void GameObject::SetFriction(float friction)
 
 void GameObject::SetDraw(bool draw)
 {
-	m_behaviour->UpdateDrawnByGameObject(draw);
-}
-
-void GameObject::SetBehaviour(Behaviour *behaviour)
-{
-	if (m_behaviour && m_behaviour->IsOwnedByGameObject() == true)
-		delete m_behaviour;
-
-	m_behaviour = behaviour;
+	isDrawn = draw;
 }
 
 void GameObject::SetSize(float size)
