@@ -5,13 +5,7 @@
 #include <glm\glm.hpp>
 #include <list>
 
-class KeyboardBehaviour;
-class SeekBehaviour;
-class FollowPathBehaviour;
-class WanderBehaviour;
-class ArrivalBehaviour;
-class PursuitBehaviour;
-
+class BehaviourManager;
 class Path;
 class Graph2D;
 class Pathfinder;
@@ -64,13 +58,14 @@ protected:
 	float m_effectLength;
 	float m_trailDelay;
 	glm::vec2 prevLocation;
-	KeyboardBehaviour *m_keyboardBehaviour;
-	SeekBehaviour *m_seekBehaviour;
-	SeekBehaviour *m_fleeBehaviour;
-	FollowPathBehaviour *m_followPathBehaviour;
-	WanderBehaviour *m_wanderBehaviour;
-	ArrivalBehaviour *m_arrivalBehaviour;
-	PursuitBehaviour *m_pursuitBehaviour;
+	BehaviourManager *m_steeringManager;
+	//KeyboardBehaviour *m_keyboardBehaviour;
+	//SeekBehaviour *m_seekBehaviour;
+	//SeekBehaviour *m_fleeBehaviour;
+	//FollowPathBehaviour *m_followPathBehaviour;
+	//WanderBehaviour *m_wanderBehaviour;
+	//ArrivalBehaviour *m_arrivalBehaviour;
+	//PursuitBehaviour *m_pursuitBehaviour;
 
 	Path*				m_path;
 	Graph2D*			m_graph;

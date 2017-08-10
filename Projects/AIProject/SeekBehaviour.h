@@ -8,18 +8,18 @@ class SeekBehaviour : public Behaviour
 {
 public:
 
-	SeekBehaviour();
+	SeekBehaviour(const char* mode);
 	virtual ~SeekBehaviour();
 
 	virtual void Update(GameObject *object, float deltaTime);
 	virtual void Draw(GameObject * object, aie::Renderer2D *renderer);
 
 	const glm::vec2 &GetTarget();
-	void SetSeekTarget(const glm::vec2 &target);
-	void SetPursuitTarget(GameObject * object, glm::vec2 targetVelocity);
+	void SetTarget(const glm::vec2 &target);
+	//void SetPursuitTarget(GameObject * object, glm::vec2 targetVelocity);
 
-	void SetPredictionTiming(float timing);
-	float GetPredictionTIming();
+	//void SetPredictionTiming(float timing);
+	//float GetPredictionTIming();
 
 	void SetForceStrength(float strength);
 	float GetForceStrength();
@@ -52,8 +52,9 @@ protected:
 
 private:
 
+	const char* m_mode;
 	glm::vec2 m_lastPosition;
 
-	void SeekCalculation();
-	void PursuitCalculation();
+	//void SeekCalculation();
+	//void PursuitCalculation();
 };

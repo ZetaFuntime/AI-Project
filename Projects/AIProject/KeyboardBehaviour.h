@@ -4,7 +4,7 @@
 class KeyboardBehaviour : public Behaviour
 {
 public:
-	KeyboardBehaviour(int upKey = 0, int downKey = 0, int leftKey = 0, int rightKey = 0);
+	KeyboardBehaviour(int upkey = 0, int downkey = 0, int leftkey = 0, int rightkey = 0);
 	virtual ~KeyboardBehaviour();
 
 	virtual void Update(GameObject *object, float deltaTime);
@@ -21,6 +21,7 @@ public:
 
 protected:
 
+	float m_forceStrength;
 	int m_upKey;
 	int m_downKey;
 	int m_leftKey;

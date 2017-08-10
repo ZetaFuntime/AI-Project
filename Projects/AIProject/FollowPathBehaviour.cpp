@@ -51,7 +51,7 @@ void FollowPathBehaviour::Update(GameObject *object, float deltaTime)
 
 		// seek toward the point
 		glm::vec2 dirToPoint = glm::normalize(point - object->GetPosition());
-		object->ApplyForce(dirToPoint * m_forceStrength);
+		SetForce(dirToPoint * m_forceStrength);
 
 		// For debugging on console
 		std::cout << m_currentPathNodeIndex << std::endl;

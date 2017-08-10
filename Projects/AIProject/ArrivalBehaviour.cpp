@@ -26,31 +26,29 @@ void ArrivalBehaviour::Update(GameObject *object, float deltaTime)
 	if (m_onTargetRadiusEnter && lastDistanceToTarget > m_targetRadius && distanceToTarget <= m_targetRadius)
 		m_onTargetRadiusEnter();
 
-	// --------------------------------------------------------------
 	// If the agent is outside the slowing radius, don't slow it down
-	// --------------------------------------------------------------
-
 	float slowRatio = (distanceToTarget < m_slowingRadius) ? (distanceToTarget / (m_slowingRadius)) : 1;
 
-	// --------------------------------------------------------------
 	// Calculate the current Angle to the destination compared to
 	// the current angle of the agent
-	// --------------------------------------------------------------
+	glm::vec2 currentDir = glm::normalize(object->GetVelocity());													
+	glm::vec2 currentDirToTarget = glm::normalize(m_targetPosition - object->GetPosition());						
 
-	glm::vec2 currentDir = glm::normalize(object->GetVelocity());
-	glm::vec2 currentDirToTarget = glm::normalize(m_targetPosition - object->GetPosition());
+	float currentAngle = atan2f(currentDir.y, currentDir.x);
+	float currentAngleToTarget = atan2f(currentDirToTarget.y, currentDirToTarget.x);
 
-	float currentAngle = 
-	// --------------------------------------------------------------
+	// Adjust the angle being input to the apply force by a small
+	// amount until it is close enough to the correct angle to
+	// be equaled to it (NOTE: because of how radians work in bootstrap, this will not work within certain ranges of the angle)
+	currentAngle =	(currentAngleToTarget - currentAngle < -0.1f) ? currentAngle - 0.1f :
+					(currentAngleToTarget - currentAngle > 0.1f) ? currentAngle + 0.1f :
+					currentAngleToTarget;
+					
 	// Apply a constant force to the agent which is scaled down as the
-	//			  agent gets closer to the destination.
-	// --------------------------------------------------------------
+	// agent gets closer to the destination.
+	glm::vec2 appliedDirToTarget = glm::vec2 (cos(currentAngle)* slowRatio * m_forceStrength,sin(currentAngle)*slowRatio *m_forceStrength);								
 
-
-
-	glm::vec2 currentDirToTarget = glm::normalize(m_targetPosition - object->GetPosition()) * slowRatio * m_forceStrength;
-
-	object->SetVelocity(currentDirToTarget);
+	SetForce(appliedDirToTarget);
 
 	m_lastPosition = object->GetPosition();
 }

@@ -1,34 +1,41 @@
 #include "KeyboardBehaviour.h"
 #include <Input.h>
 #include "GameObject.h"
-KeyboardBehaviour::KeyboardBehaviour(int upKey, int downKey, int leftKey, int rightKey) :
+
+KeyboardBehaviour::KeyboardBehaviour(int upkey, int downkey, int leftkey, int rightkey) :
 	Behaviour(),
-	m_upKey(upKey),
-	m_downKey(downKey),
-	m_rightKey(rightKey),
-	m_leftKey(leftKey)
+	m_upKey(upkey),
+	m_downKey(downkey),
+	m_leftKey(leftkey),
+	m_rightKey(rightkey)
 {
-	if (m_upKey == 0) m_upKey = aie::INPUT_KEY_W;
-	if (m_downKey == 0) m_downKey = aie::INPUT_KEY_S;
-	if (m_leftKey == 0) m_leftKey = aie::INPUT_KEY_A;
-	if (m_rightKey == 0) m_rightKey = aie::INPUT_KEY_D;
+	m_forceStrength = 100.f;
+	if (upkey == 0) m_upKey = aie::INPUT_KEY_W;
+	if (downkey == 0) m_downKey = aie::INPUT_KEY_S;
+	if (leftkey == 0) m_leftKey = aie::INPUT_KEY_A;
+	if (rightkey == 0) m_rightKey = aie::INPUT_KEY_D;
 }
 
 KeyboardBehaviour::~KeyboardBehaviour()
 {
-
+	
 }
 
 void KeyboardBehaviour::Update(GameObject * object, float deltaTime)
 {
+
+	glm::vec2 InputForce;
+
 	if (aie::Input::getInstance()->isKeyDown(m_upKey))
-		object->ApplyForce(glm::vec2(0, 100));
+		InputForce += (glm::vec2(0, m_forceStrength));
 	if (aie::Input::getInstance()->isKeyDown(m_downKey))
-		object->ApplyForce(glm::vec2(0, -100));
+		InputForce += (glm::vec2(0, -m_forceStrength));
 	if (aie::Input::getInstance()->isKeyDown(m_leftKey))
-		object->ApplyForce(glm::vec2(-100, 0));
+		InputForce += (glm::vec2(-m_forceStrength, 0));
 	if (aie::Input::getInstance()->isKeyDown(m_rightKey))
-		object->ApplyForce(glm::vec2(100, 0));
+		InputForce += (glm::vec2(m_forceStrength, 0));
+
+	SetForce(InputForce);
 }
 
 int KeyboardBehaviour::GetUpKey()

@@ -7,6 +7,7 @@
 
 using std::map;
 using std::vector;
+using glm::vec2;
 
 class BehaviourManager : public Behaviour
 {
@@ -19,16 +20,27 @@ public:
 
 	void PushBehaviour(const char* name, Behaviour *behaviour);
 	void SetBehaviour(const char* name);
-	
+
+	void SetMaxVelocity(float MaxSpeed);
+	float GetMaxVelocity();
+
+
 	// Get the behaviour called according to its numerical key in the vector
-	Behaviour* GetBehaviour();
+	Behaviour* GetBehaviour(const char* name);
+
+	void PopBackBehaviour();
+
+	void ClearBehaviours();
 
 private:
 
-	glm::vec2 CalculateForce();
+	vec2 CalculateForce();
 
 	map <const char*, Behaviour*>		m_behaviours;
 	vector<Behaviour*>					m_activeBehaviours;
+	vector<vec2>						m_appliedForces;
 
 protected:
+
+	float m_maxSpeed;
 };

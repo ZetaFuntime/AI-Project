@@ -9,7 +9,7 @@
 WanderBehaviour::WanderBehaviour() :
 	Behaviour(),
 	m_circleRadius(100.f),
-	m_forceStrength(50.f),
+	m_forceStrength(100.f),
 	m_changeTimePassed(0.f)
 {
 	m_wanderAngle = ((rand() % 618) - 315) / 100.f;
@@ -20,12 +20,21 @@ WanderBehaviour::~WanderBehaviour()
 
 }
 
+// --------------------------------------------------------------
+// The update calculates the wander direction to apply to the force
+// given to the unit. There are two that were made, but i applied
+// the one that was more similar to the calculations used by the
+// website aaron gave to the class.
+// --------------------------------------------------------------
+
 void WanderBehaviour::Update(GameObject *object, float deltaTime)
 {
+#pragma region Method 1
 	// -----------------------------------------------------------
 	// Version 1 - Wandering Algorithm based on random direction
 	//			   and force.
 	// -----------------------------------------------------------
+
 	//m_changetimePassed += deltaTime;
 	//m_applytimePassed += deltaTime;
 	//if (m_changetimePassed > m_changeThreshold)
@@ -47,15 +56,20 @@ void WanderBehaviour::Update(GameObject *object, float deltaTime)
 	//	object->ApplyForce(m_wanderVector);
 	//	m_applytimePassed = 0;
 	//}
+#pragma endregion
 
+#pragma region Method 2
 	// ----------------------------------------------------------
 	// Version 2 - Wandering algorithm based on random normalised
 	//			   vector and randomised displacement forces
 	// ----------------------------------------------------------
+
 	m_changeTimePassed += deltaTime;
 	
 	m_circleCenter = glm::normalize(object->GetVelocity())*m_forceStrength;
 
+	// Every 0.5 second count, apply the changed direction.
+	// Change made to make the 'wander' appear more believable
 	if (m_changeTimePassed > 0.5f)
 	{
 		glm::vec2 currentDir = glm::normalize(object->GetVelocity());
@@ -66,8 +80,11 @@ void WanderBehaviour::Update(GameObject *object, float deltaTime)
 		wanderForce = m_circleCenter + m_displacement;
 		m_changeTimePassed = 0.f;
 	}
-	object->ApplyForce(wanderForce);
-	std::cout << "WanderAngle: "<<m_wanderAngle << std::endl;
+
+	// Update the force for what is being used
+	SetForce(wanderForce);
+
+#pragma endregion
 }
 
 void WanderBehaviour::Draw(GameObject * object, aie::Renderer2D * renderer)
@@ -79,7 +96,7 @@ void WanderBehaviour::Draw(GameObject * object, aie::Renderer2D * renderer)
 		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.25f);
 		renderer->drawCircle(agentPos.x + m_circleCenter.x, agentPos.y + m_circleCenter.y, m_circleRadius);
 
-		renderer->setRenderColour(0x00000066);
+		renderer->setRenderColour(0.f, 0.f, 0.f, 0.5f);
 		renderer->drawCircle(agentPos.x + m_circleCenter.x, agentPos.y + m_circleCenter.y, m_circleRadius - 5.f);
 
 		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 1.0f);

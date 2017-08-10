@@ -3,13 +3,15 @@
 #include <Renderer2D.h>
 #include <glm\glm.hpp>
 
-SeekBehaviour::SeekBehaviour() :
-	Behaviour(),
-	m_forceStrength(100),
-	m_innerRadius(20),
-	m_outerRadius(100)
+SeekBehaviour::SeekBehaviour(const char* mode) : Behaviour(), m_mode(mode)
 {
-
+	if (mode == "FLEE") {
+		m_forceStrength = -100.f;
+	} else {
+		m_forceStrength = 100.f;
+	} 
+	m_innerRadius = 20.f;
+	m_outerRadius = 100.f;
 }
 
 SeekBehaviour::~SeekBehaviour()
@@ -39,7 +41,7 @@ void SeekBehaviour::Update(GameObject *object, float deltaTime)
 		m_onOuterRadiusExit();
 
 	glm::vec2 dirToTarget = glm::normalize(m_targetPosition - object->GetPosition()) * m_forceStrength;
-	object->ApplyForce(dirToTarget);
+	SetForce(dirToTarget);
 
 	m_lastPosition = object->GetPosition();
 }
@@ -64,25 +66,25 @@ const glm::vec2 &SeekBehaviour::GetTarget()
 	return m_targetPosition;
 }
 
-void SeekBehaviour::SetSeekTarget(const glm::vec2 &target)
+void SeekBehaviour::SetTarget(const glm::vec2 &target)
 {
 	m_targetPosition = target;
 }
 
-void SeekBehaviour::SetPursuitTarget(GameObject *object, glm::vec2 targetVelocity)
-{
-	m_targetPosition = (targetVelocity - object->GetPosition())*m_predictionTiming;
-}
+//void SeekBehaviour::SetPursuitTarget(GameObject *object, glm::vec2 targetVelocity)
+//{
+//	m_targetPosition = (targetVelocity - object->GetPosition())*m_predictionTiming;
+//}
 
-void SeekBehaviour::SetPredictionTiming(float timing)
-{
-	m_predictionTiming = timing;
-}
-
-float SeekBehaviour::GetPredictionTIming()
-{
-	return m_predictionTiming;
-}
+//void SeekBehaviour::SetPredictionTiming(float timing)
+//{
+//	m_predictionTiming = timing;
+//}
+//
+//float SeekBehaviour::GetPredictionTIming()
+//{
+//	return m_predictionTiming;
+//}
 
 void SeekBehaviour::SetForceStrength(float strength)
 {
@@ -134,10 +136,10 @@ void SeekBehaviour::OnOuterRadiusExit(std::function< void() > func)
 	m_onOuterRadiusExit = func;
 }
 
-void SeekBehaviour::SeekCalculation()
-{
-}
-
-void SeekBehaviour::PursuitCalculation()
-{
-}
+//void SeekBehaviour::SeekCalculation()
+//{
+//}
+//
+//void SeekBehaviour::PursuitCalculation()
+//{
+//}
