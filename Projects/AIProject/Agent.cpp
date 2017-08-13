@@ -1,11 +1,6 @@
 #include "Agent.h"
 #include "BehaviourManager.h"
-//#include "KeyboardBehaviour.h"
-//#include "SeekBehaviour.h"
 #include "Path.h"
-//#include "FollowPathBehaviour.h"
-//#include "WanderBehaviour.h"
-//#include "ArrivalBehaviour.h"
 
 #include <glm\glm.hpp>
 #include <Font.h>
@@ -25,8 +20,6 @@ Agent::Agent(aie::Texture *tex) :
 	m_graph(nullptr)
 {
 	m_steeringManager = new BehaviourManager();
-	m_steeringManager->SetBehaviour("KEYBOARD");
-
 	//m_seekBehaviour = new SeekBehaviour();
 	//m_seekBehaviour->OnOuterRadiusEnter([this]() {
 	//	m_arrivalBehaviour->SetTarget(m_seekBehaviour->GetTarget());
@@ -63,11 +56,6 @@ Agent::~Agent()
 {
 	delete m_path;
 	delete m_steeringManager;
-	//delete m_followPathBehaviour;
-	//delete m_fleeBehaviour;
-	//delete m_seekBehaviour;
-	//delete m_keyboardBehaviour;
-	//delete m_wanderBehaviour;
 }
 
 void Agent::Update(float deltaTime)
@@ -81,7 +69,7 @@ void Agent::Update(float deltaTime)
 	// -------------------------------------------------------------
 	if (input->wasKeyPressed(aie::INPUT_KEY_BACKSPACE))
 	{
-		m_steeringManager->ClearBehaviours();
+		m_steeringManager->SetInactive();
 	}
 	// --------------- Seek Behaviour Command ----------------------
 	// Agent will seek towards a given point from the user
@@ -108,7 +96,7 @@ void Agent::Update(float deltaTime)
 
 	if (input->wasKeyPressed(aie::INPUT_KEY_K))
 	{
-		m_steeringManager->SetBehaviour("KEYBOARD");
+		m_steeringManager->SetActive(KEYBOARD);
 	}
 
 	// --------------- Follow Behaviour Command --------------------
@@ -160,8 +148,6 @@ void Agent::Update(float deltaTime)
 	//{
 	//	SetDraw(false);
 	//}
-
-	m_steeringManager->Update(this, deltaTime);
 
 	// Update all gameobjects currently in use
 	GameObject::Update(deltaTime);
@@ -267,21 +253,7 @@ void Agent::DoTrailLogic()
 		prevPoint.rotation = atan2f(targetHeading.y - prevPoint.data.y,
 			targetHeading.x - prevPoint.data.x);
 
-		int randnum = rand() % 10;
-		switch (randnum)
-		{
-		case 1:		prevPoint.colour = BLUE;	break;
-		case 2:		prevPoint.colour = RED;		break;
-		case 3:		prevPoint.colour = YELLOW;	break;
-		case 4:		prevPoint.colour = GREEN;	break;
-		case 5:		prevPoint.colour = ORANGE;	break;
-		case 6:		prevPoint.colour = TEAL;	break;
-		case 7:		prevPoint.colour = PURPLE;	break;
-		case 8:		prevPoint.colour = PINK;	break;
-		case 9:		prevPoint.colour = WHITE;	break;
-		case 10:	prevPoint.colour = DARKBLUE; break;
-		default:	prevPoint.colour = WHITE;	break;
-		}
+		prevPoint.colour = GetColour();
 
 		m_prevPoints.push_back(prevPoint);
 

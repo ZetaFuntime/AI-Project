@@ -84,9 +84,6 @@
     <ClCompile Include="Graph2DRenderer.cpp">
       <Filter>Source Files\Entity and Scene</Filter>
     </ClCompile>
-    <ClCompile Include="IdleBehaviour.cpp">
-      <Filter>Source Files\AI\Behaviours</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SeekBehaviour.h">
@@ -133,9 +130,6 @@
     </ClInclude>
     <ClInclude Include="Behaviour.h">
       <Filter>Header Files\AI\AI Base Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="IdleBehaviour.h">
-      <Filter>Header Files\AI\Behaviours</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

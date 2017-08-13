@@ -8,18 +8,18 @@ class SeekBehaviour : public Behaviour
 {
 public:
 
-	SeekBehaviour(const char* mode);
+	SeekBehaviour();
 	virtual ~SeekBehaviour();
 
 	virtual void Update(GameObject *object, float deltaTime);
 	virtual void Draw(GameObject * object, aie::Renderer2D *renderer);
 
 	const glm::vec2 &GetTarget();
-	void SetTarget(const glm::vec2 &target);
-	//void SetPursuitTarget(GameObject * object, glm::vec2 targetVelocity);
+	void SetSeekTarget(const glm::vec2 &target);
+	void SetPursueTarget(GameObject* object, glm::vec2 targetVelocity);
 
-	//void SetPredictionTiming(float timing);
-	//float GetPredictionTIming();
+	void SetPredictionTiming(float timing);
+	float GetPredictionTIming();
 
 	void SetForceStrength(float strength);
 	float GetForceStrength();
@@ -29,11 +29,6 @@ public:
 
 	void SetOuterRadius(float radius);
 	float GetOuterRadius();
-
-	void OnInnerRadiusEnter(std::function< void() > func);
-	void OnInnerRadiusExit(std::function< void() > func);
-	void OnOuterRadiusEnter(std::function< void() > func);
-	void OnOuterRadiusExit(std::function< void() > func);
 
 protected:
 
@@ -45,16 +40,12 @@ protected:
 	float m_innerRadius;
 	float m_outerRadius;
 
-	std::function< void() > m_onInnerRadiusEnter;
-	std::function< void() > m_onInnerRadiusExit;
-	std::function< void() > m_onOuterRadiusEnter;
-	std::function< void() > m_onOuterRadiusExit;
+	bool m_withinInRadius;
+	bool m_withinOutRadius;
 
 private:
 
 	const char* m_mode;
 	glm::vec2 m_lastPosition;
 
-	//void SeekCalculation();
-	//void PursuitCalculation();
 };

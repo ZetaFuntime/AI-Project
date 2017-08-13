@@ -36,7 +36,7 @@ bool AIProjectApp::startup() {
 	m_timer = 0.f;
 
 	SetupGraph();
-	for (unsigned int i = 0; i < 1; i++)
+	for (unsigned int i = 0; i < 2; i++)
 	{
 		AddAgent();
 	}
@@ -111,41 +111,42 @@ void AIProjectApp::update(float deltaTime) {
 	// If Agents are colliding with each other, apply a force to move them off
 	// each other's radii
 	// -----------------------------------------------------------------------
-	m_timer += deltaTime;
-	std::vector<Agent* > m_neighbours = m_Agents;
-	for (auto iter = m_Agents.begin(); iter != m_Agents.end(); iter++)
-	{
-		auto agent = (*iter);
-		const glm::vec2 &agentPos = agent->GetPosition();
-		const glm::vec2 &agentVel = agent->GetVelocity();
-		float agentSize = agent->GetSize();
-		
-		for (auto neighboursIter = m_neighbours.begin(); neighboursIter != m_neighbours.end(); neighboursIter++)
-		{
-			if ((*neighboursIter) == agent)
-				continue;
-
-			const glm::vec2 &neighbourPos = (*neighboursIter)->GetPosition();
-			const glm::vec2 &neighbourVel = (*neighboursIter)->GetVelocity();
-			float neighbourSize = (*neighboursIter)->GetSize();
-	
-			// Detect if the agent and the neighbour are within each other's size circle
-			if (glm::length(agentPos - neighbourPos) < (agentSize + neighbourSize) / 2){
-				
-				// Calculate the repulsion force
-				float intensityRatio = (agentSize + neighbourSize) / glm::length(agentPos - neighbourPos);
-				float m_forceStrength = 10.f;
-	
-				glm::vec2 pushForce = glm::normalize(agentPos - neighbourPos);
-				(*iter)->ApplyForce(pushForce*m_forceStrength*intensityRatio);
-				(*neighboursIter)->ApplyForce(-pushForce*m_forceStrength*intensityRatio);
-
-				std::cout << "Agent in range |Agent| X: " << agentPos.x  << " Y: "<< agentPos.y <<"|Neighour|X: " << neighbourPos.x  << " Y : "<< neighbourPos.y << std::endl;
-				m_timer = 0.f;
-			}
-		}
-	}
-
+#pragma region Agent Collision
+	//m_timer += deltaTime;
+	//std::vector<Agent* > m_neighbours = m_Agents;
+	//for (auto iter = m_Agents.begin(); iter != m_Agents.end(); iter++)
+	//{
+	//	auto agent = (*iter);
+	//	const glm::vec2 &agentPos = agent->GetPosition();
+	//	const glm::vec2 &agentVel = agent->GetVelocity();
+	//	float agentSize = agent->GetSize();
+	//	
+	//	for (auto neighboursIter = m_neighbours.begin(); neighboursIter != m_neighbours.end(); neighboursIter++)
+	//	{
+	//		if ((*neighboursIter) == agent)
+	//			continue;
+	//
+	//		const glm::vec2 &neighbourPos = (*neighboursIter)->GetPosition();
+	//		const glm::vec2 &neighbourVel = (*neighboursIter)->GetVelocity();
+	//		float neighbourSize = (*neighboursIter)->GetSize();
+	//
+	//		// Detect if the agent and the neighbour are within each other's size circle
+	//		if (glm::length(agentPos - neighbourPos) < (agentSize + neighbourSize) / 2){
+	//			
+	//			// Calculate the repulsion force
+	//			float intensityRatio = (agentSize + neighbourSize) / glm::length(agentPos - neighbourPos);
+	//			float m_forceStrength = 10.f;
+	//
+	//			glm::vec2 pushForce = glm::normalize(agentPos - neighbourPos);
+	//			(*iter)->ApplyForce(pushForce*m_forceStrength*intensityRatio);
+	//			(*neighboursIter)->ApplyForce(-pushForce*m_forceStrength*intensityRatio);
+	//
+	//			std::cout << "Agent in range |Agent| X: " << agentPos.x  << " Y: "<< agentPos.y <<"|Neighour|X: " << neighbourPos.x  << " Y : "<< neighbourPos.y << std::endl;
+	//			m_timer = 0.f;
+	//		}
+	//	}
+	//}
+#pragma endregion
 }
 
 void AIProjectApp::draw() {

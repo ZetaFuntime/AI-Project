@@ -1,17 +1,18 @@
 #include "SeekBehaviour.h"
 #include "GameObject.h"
 #include <Renderer2D.h>
+#include <glm\vec2.hpp>
 #include <glm\glm.hpp>
 
-SeekBehaviour::SeekBehaviour(const char* mode) : Behaviour(), m_mode(mode)
+SeekBehaviour::SeekBehaviour() : 
+	Behaviour(),
+	m_withinInRadius(false),
+	m_withinOutRadius(false),
+	m_forceStrength(100.f),
+	m_innerRadius(20.f),
+	m_outerRadius(100.f)
 {
-	if (mode == "FLEE") {
-		m_forceStrength = -100.f;
-	} else {
-		m_forceStrength = 100.f;
-	} 
-	m_innerRadius = 20.f;
-	m_outerRadius = 100.f;
+	
 }
 
 SeekBehaviour::~SeekBehaviour()
@@ -24,24 +25,13 @@ void SeekBehaviour::Update(GameObject *object, float deltaTime)
 	float lastDistanceToTarget = glm::length(m_targetPosition - m_lastPosition);
 	float distanceToTarget = glm::length(m_targetPosition - object->GetPosition());
 
-	// have we just entered the inner radius
-	if (m_onInnerRadiusEnter && lastDistanceToTarget > m_innerRadius && distanceToTarget <= m_innerRadius)
-		m_onInnerRadiusEnter();
+	if (glm::length(m_targetPosition - object->GetPosition()) < m_innerRadius)
+		m_withinInRadius = true;
+	else if (m_outerRadius < glm::length(m_targetPosition - object->GetPosition()) > m_innerRadius)
+		m_withinOutRadius = true;
+	else if (glm::length(m_targetPosition - object->GetPosition()) > m_outerRadius)
 
-	// have we just exited the inner radius
-	if (m_onInnerRadiusExit && lastDistanceToTarget <= m_innerRadius && distanceToTarget > m_innerRadius)
-		m_onInnerRadiusExit();
-
-	// have we just entered the outer radius
-	if (m_onOuterRadiusEnter && lastDistanceToTarget > m_outerRadius && distanceToTarget <= m_outerRadius)
-		m_onOuterRadiusEnter();
-
-	// have we just exited the outer radius
-	if (m_onOuterRadiusExit && lastDistanceToTarget <= m_outerRadius && distanceToTarget > m_outerRadius)
-		m_onOuterRadiusExit();
-
-	glm::vec2 dirToTarget = glm::normalize(m_targetPosition - object->GetPosition()) * m_forceStrength;
-	SetForce(dirToTarget);
+	SetForce(glm::normalize(m_targetPosition - object->GetPosition()) * m_forceStrength);
 
 	m_lastPosition = object->GetPosition();
 }
@@ -66,25 +56,25 @@ const glm::vec2 &SeekBehaviour::GetTarget()
 	return m_targetPosition;
 }
 
-void SeekBehaviour::SetTarget(const glm::vec2 &target)
+void SeekBehaviour::SetSeekTarget(const glm::vec2 &target)
 {
 	m_targetPosition = target;
 }
 
-//void SeekBehaviour::SetPursuitTarget(GameObject *object, glm::vec2 targetVelocity)
-//{
-//	m_targetPosition = (targetVelocity - object->GetPosition())*m_predictionTiming;
-//}
+void SeekBehaviour::SetPredictionTiming(float timing)
+{
+	m_predictionTiming = timing;
+}
 
-//void SeekBehaviour::SetPredictionTiming(float timing)
-//{
-//	m_predictionTiming = timing;
-//}
-//
-//float SeekBehaviour::GetPredictionTIming()
-//{
-//	return m_predictionTiming;
-//}
+float SeekBehaviour::GetPredictionTIming()
+{
+	return m_predictionTiming;
+}
+
+void SeekBehaviour::SetPursueTarget(GameObject *object, glm::vec2 targetVelocity)
+{
+	m_targetPosition = (targetVelocity - object->GetPosition())*m_predictionTiming;
+}
 
 void SeekBehaviour::SetForceStrength(float strength)
 {
@@ -115,31 +105,3 @@ float SeekBehaviour::GetOuterRadius()
 {
 	return m_outerRadius;
 }
-
-void SeekBehaviour::OnInnerRadiusEnter(std::function< void() > func)
-{
-	m_onInnerRadiusEnter = func;
-}
-
-void SeekBehaviour::OnInnerRadiusExit(std::function< void() > func)
-{
-	m_onInnerRadiusExit = func;
-}
-
-void SeekBehaviour::OnOuterRadiusEnter(std::function< void() > func)
-{
-	m_onOuterRadiusEnter = func;
-}
-
-void SeekBehaviour::OnOuterRadiusExit(std::function< void() > func)
-{
-	m_onOuterRadiusExit = func;
-}
-
-//void SeekBehaviour::SeekCalculation()
-//{
-//}
-//
-//void SeekBehaviour::PursuitCalculation()
-//{
-//}

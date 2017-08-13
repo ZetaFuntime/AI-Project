@@ -1,6 +1,5 @@
 #include "GameObject.h"
-#include "Behaviour.h"
-
+#include "BehaviourManager.h"
 #include <Texture.h>
 #include <Renderer2D.h>
 #include <glm\glm.hpp>
@@ -18,16 +17,17 @@ GameObject::GameObject(aie::Texture *tex) :
 	isDrawn(true),
 	m_colour(WHITE)
 {
-
+	m_steeringmanager = new BehaviourManager();
 }
 
 GameObject::~GameObject()
 {
-
+	delete m_steeringmanager;
 }
 
 void GameObject::Update(float deltaTime)
 {
+	m_steeringmanager->Update(this, deltaTime);
 	SimulatePhysics(deltaTime);
 }
 
@@ -90,6 +90,11 @@ const glm::vec2 & GameObject::GetVelocity()
 float GameObject::GetFriction()
 {
 	return m_friction;
+}
+
+ColourPalette GameObject::GetColour()
+{
+	return m_colour;
 }
 
 void GameObject::SetTexture(aie::Texture *tex)

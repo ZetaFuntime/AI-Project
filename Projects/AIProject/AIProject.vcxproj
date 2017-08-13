@@ -97,7 +97,6 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graph2D.cpp" />
     <ClCompile Include="Graph2DRenderer.cpp" />
-    <ClCompile Include="IdleBehaviour.cpp" />
     <ClCompile Include="KeyboardBehaviour.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Path.cpp" />
@@ -116,7 +115,6 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Graph2D.h" />
     <ClInclude Include="Graph2DRenderer.h" />
-    <ClInclude Include="IdleBehaviour.h" />
     <ClInclude Include="KeyboardBehaviour.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="Pathfinder.h" />

@@ -1,5 +1,4 @@
 #pragma once
-#include "Behaviour.h"
 #include <glm\vec2.hpp>
 #include <vector>
 #include <map>
@@ -17,6 +16,8 @@ enum ColourPalette
 	PURPLE = 0x7411E3FF, WHITE = 0xFFFFFFFF, 
 	PINK = 0xFA22EA, DARKBLUE = 0x012345FF
 };
+
+class BehaviourManager;
 
 class GameObject
 {
@@ -57,6 +58,7 @@ public:
 	const glm::vec2 & GetPosition();
 	const glm::vec2 & GetVelocity();
 	float GetFriction();
+	ColourPalette GetColour();
 
 #pragma endregion
 
@@ -73,10 +75,8 @@ protected:
 	float m_friction;
 	float m_size;
 
-	aie::Texture	*m_tex;
-
-	std::map<const char*, Behaviour*>		m_behaviours;
-	std::vector<Behaviour*>					m_activeBehaviours;
+	aie::Texture*		m_tex;
+	BehaviourManager*	m_steeringmanager;
 
 private:
 };
