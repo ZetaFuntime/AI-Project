@@ -10,6 +10,7 @@
 #include <math.h>
 #include <iostream>
 
+#include "BehaviourManager.h"
 #include "Graph2D.h"
 #include "Pathfinder.h"
 
@@ -19,7 +20,7 @@ Agent::Agent(aie::Texture *tex) :
 	m_endNode(nullptr),
 	m_graph(nullptr)
 {
-	m_steeringManager = new BehaviourManager();
+	m_steeringmanager = new BehaviourManager;
 	//m_seekBehaviour = new SeekBehaviour();
 	//m_seekBehaviour->OnOuterRadiusEnter([this]() {
 	//	m_arrivalBehaviour->SetTarget(m_seekBehaviour->GetTarget());
@@ -37,7 +38,7 @@ Agent::Agent(aie::Texture *tex) :
 	//	SetBehaviour(m_keyboardBehaviour);
 	//});
 
-	m_path = new Path();
+	//m_path = new Path();
 
 	//m_followPathBehaviour = new FollowPathBehaviour();
 	//m_followPathBehaviour->SetPath(m_path);
@@ -54,8 +55,8 @@ Agent::Agent(aie::Texture *tex) :
 
 Agent::~Agent()
 {
-	delete m_path;
-	delete m_steeringManager;
+	//delete m_path;
+	delete m_steeringmanager;
 }
 
 void Agent::Update(float deltaTime)
@@ -69,7 +70,7 @@ void Agent::Update(float deltaTime)
 	// -------------------------------------------------------------
 	if (input->wasKeyPressed(aie::INPUT_KEY_BACKSPACE))
 	{
-		m_steeringManager->SetInactive();
+		m_steeringmanager->SetInactive();
 	}
 	// --------------- Seek Behaviour Command ----------------------
 	// Agent will seek towards a given point from the user
@@ -96,7 +97,7 @@ void Agent::Update(float deltaTime)
 
 	if (input->wasKeyPressed(aie::INPUT_KEY_K))
 	{
-		m_steeringManager->SetActive(KEYBOARD);
+		m_steeringmanager->SetActive(KEYBOARD);
 	}
 
 	// --------------- Follow Behaviour Command --------------------
@@ -151,6 +152,9 @@ void Agent::Update(float deltaTime)
 
 	// Update all gameobjects currently in use
 	GameObject::Update(deltaTime);
+
+	// Update Behaviours
+	m_steeringmanager->Update(deltaTime);
 
 	// Update the trails left by player objects
 	DoTrailLogic();

@@ -21,7 +21,7 @@ KeyboardBehaviour::~KeyboardBehaviour()
 	
 }
 
-void KeyboardBehaviour::Update(GameObject * object, float deltaTime)
+void KeyboardBehaviour::Update(float deltaTime)
 {
 
 	glm::vec2 InputForce;

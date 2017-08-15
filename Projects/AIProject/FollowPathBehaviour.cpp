@@ -22,7 +22,7 @@ FollowPathBehaviour::~FollowPathBehaviour()
 
 }
 
-void FollowPathBehaviour::Update(GameObject *object, float deltaTime)
+void FollowPathBehaviour::Update(float deltaTime)
 {
 	auto & path = m_path->GetPath();
 	if (path.empty() == false)
@@ -31,7 +31,7 @@ void FollowPathBehaviour::Update(GameObject *object, float deltaTime)
 			m_currentPathNodeIndex = m_currentPathNodeIndex % path.size();
 		glm::vec2 point = path[m_currentPathNodeIndex];
 		if (!m_pathComplete) {
-			if (glm::length(point - object->GetPosition()) < 20)
+			if (glm::length(point - GetOwnerPosition()) < 20)
 			{
 				(m_patrolBack) ? m_currentPathNodeIndex -= 1 : m_currentPathNodeIndex += 1;
 				if (m_currentPathNodeIndex == path.size() && m_patrolMode)
@@ -50,7 +50,7 @@ void FollowPathBehaviour::Update(GameObject *object, float deltaTime)
 			m_pathComplete = true;
 
 		// seek toward the point
-		glm::vec2 dirToPoint = glm::normalize(point - object->GetPosition());
+		glm::vec2 dirToPoint = glm::normalize(point - GetOwnerPosition());
 		SetForce(dirToPoint * m_forceStrength);
 
 		// For debugging on console
@@ -58,7 +58,7 @@ void FollowPathBehaviour::Update(GameObject *object, float deltaTime)
 	}
 }
 
-void FollowPathBehaviour::Draw(GameObject *object, aie::Renderer2D *renderer)
+void FollowPathBehaviour::Draw(aie::Renderer2D *renderer)
 {
 	auto &path = m_path->GetPath();
 	glm::vec2 lastPathPoint;

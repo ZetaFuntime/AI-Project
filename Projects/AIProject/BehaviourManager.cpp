@@ -6,6 +6,7 @@
 #include "WanderBehaviour.h"
 #include "GameObject.h"
 #include <assert.h>
+#include <glm/vec2.hpp>
 
 BehaviourManager::BehaviourManager()
 {
@@ -13,7 +14,7 @@ BehaviourManager::BehaviourManager()
 	m_arrival = new ArrivalBehaviour();
 	m_wander = new WanderBehaviour();
 	m_keyboard = new KeyboardBehaviour();
-	m_follow = new FollowPathBehaviour();
+	//m_follow = new FollowPathBehaviour();
 }
 
 BehaviourManager::~BehaviourManager()
@@ -21,22 +22,28 @@ BehaviourManager::~BehaviourManager()
 	
 }
 
-void BehaviourManager::Update(GameObject *object, float deltaTime)
+void BehaviourManager::Update(float deltaTime)
 {
-	m_seek->Update(object, deltaTime);
-	m_arrival->Update(object, deltaTime);
-	m_wander->Update(object, deltaTime);
-	m_keyboard->Update(object, deltaTime);
-	m_follow->Update(object, deltaTime);
+	m_seek->Update(deltaTime);
+	m_arrival->Update(deltaTime);
+	m_wander->Update(deltaTime);
+	m_keyboard->Update(deltaTime);
+	//m_follow->Update(deltaTime);
+
+	SetForce(m_seek->ReturnForce());
+	SetForce(m_arrival->ReturnForce());
+	SetForce(m_wander->ReturnForce());
+	SetForce(m_keyboard->ReturnForce());
+	SetForce(m_follow->ReturnForce());
 }
 
-void BehaviourManager::Draw(GameObject *object, aie::Renderer2D *renderer)
+void BehaviourManager::Draw(aie::Renderer2D *renderer)
 {
-	m_seek->Draw(object, renderer);
-	m_arrival->Draw(object, renderer);
-	m_follow->Draw(object, renderer);
-	m_keyboard->Draw(object, renderer);
-	m_wander->Draw(object, renderer);
+	m_seek->Draw(renderer);
+	m_arrival->Draw(renderer);
+	//m_follow->Draw(renderer);
+	m_keyboard->Draw(renderer);
+	m_wander->Draw(renderer);
 }
 
 void BehaviourManager::SetMaxVelocity(float MaxSpeed)
@@ -77,5 +84,10 @@ void BehaviourManager::SetInactive()
 	m_seek->IsActive(false);
 	m_arrival->IsActive(false);
 	m_wander->IsActive(false);
-	m_follow->IsActive(false);
+	//m_follow->IsActive(false);
+}
+
+vec2 BehaviourManager::CalculateForce()
+{
+	return vec2();
 }

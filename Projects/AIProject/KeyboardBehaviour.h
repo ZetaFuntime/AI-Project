@@ -7,7 +7,7 @@ public:
 	KeyboardBehaviour(int upkey = 0, int downkey = 0, int leftkey = 0, int rightkey = 0);
 	virtual ~KeyboardBehaviour();
 
-	virtual void Update(GameObject *object, float deltaTime);
+	virtual void Update(float deltaTime);
 
 	int GetUpKey();
 	int GetDownKey();

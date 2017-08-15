@@ -20,23 +20,23 @@ SeekBehaviour::~SeekBehaviour()
 
 }
 
-void SeekBehaviour::Update(GameObject *object, float deltaTime)
+void SeekBehaviour::Update(float deltaTime)
 {
 	float lastDistanceToTarget = glm::length(m_targetPosition - m_lastPosition);
-	float distanceToTarget = glm::length(m_targetPosition - object->GetPosition());
+	float distanceToTarget = glm::length(m_targetPosition - GetOwnerPosition());
 
-	if (glm::length(m_targetPosition - object->GetPosition()) < m_innerRadius)
+	if (glm::length(m_targetPosition - GetOwnerPosition()) < m_innerRadius)
 		m_withinInRadius = true;
-	else if (m_outerRadius < glm::length(m_targetPosition - object->GetPosition()) > m_innerRadius)
+	else if (m_outerRadius < glm::length(m_targetPosition - GetOwnerPosition()) > m_innerRadius)
 		m_withinOutRadius = true;
-	else if (glm::length(m_targetPosition - object->GetPosition()) > m_outerRadius)
+	else if (glm::length(m_targetPosition - GetOwnerPosition()) > m_outerRadius)
 
-	SetForce(glm::normalize(m_targetPosition - object->GetPosition()) * m_forceStrength);
+	SetForce(glm::normalize(m_targetPosition - GetOwnerPosition()) * m_forceStrength);
 
-	m_lastPosition = object->GetPosition();
+	m_lastPosition = GetOwnerPosition();
 }
 
-void SeekBehaviour::Draw(GameObject * object, aie::Renderer2D *renderer)
+void SeekBehaviour::Draw(aie::Renderer2D *renderer)
 {
 	if (IsDrawnByGameObject()) {
 		renderer->drawBox(m_targetPosition.x, m_targetPosition.y, 10.f, 10.f);

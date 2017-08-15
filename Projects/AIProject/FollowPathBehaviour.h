@@ -10,8 +10,8 @@ public:
 	FollowPathBehaviour();
 	virtual ~FollowPathBehaviour();
 
-	virtual void Update(GameObject *object, float deltaTime);
-	virtual void Draw(GameObject *object, aie::Renderer2D *renderer);
+	virtual void Update(float deltaTime);
+	virtual void Draw(aie::Renderer2D *renderer);
 
 	void SetPath(Path *path);
 	Path *GetPath();

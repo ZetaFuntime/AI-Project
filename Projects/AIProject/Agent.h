@@ -6,7 +6,7 @@
 #include <list>
 
 class BehaviourManager;
-class Path;
+//class Path;
 class Graph2D;
 class Pathfinder;
 
@@ -36,44 +36,21 @@ public:
 	void DoPathLogic();
 	void DoTrailLogic();
 
-	// Flock Behaviour functions
-	//void Flock(Player *allAgents, unsigned int numAgents,
-	//			 float neighbourRadius, float seperationRadius,
-	//			 float seperationWeight, float alignmentWeight,
-	//			 float coherenceWeight);
-
-	// Flock Behaviour variables - Todo
-
-protected:
-
-	//glm::vec2 Seperation(std::vector<Player *> &neighbours, float seperationRadius);
-	//glm::vec2 Alignment(std::vector<Player *> &neighbours);
-	//glm::vec2 Coherence(std::vector<Player *> &neighbours);
-	//
-	//glm::vec2 SteerTo(glm::vec2 target);
-
 protected:
 
 	int mX, mY;
 	float m_effectLength;
 	float m_trailDelay;
 	glm::vec2 prevLocation;
-	BehaviourManager *m_steeringManager;
-	//KeyboardBehaviour *m_keyboardBehaviour;
-	//SeekBehaviour *m_seekBehaviour;
-	//SeekBehaviour *m_fleeBehaviour;
-	//FollowPathBehaviour *m_followPathBehaviour;
-	//WanderBehaviour *m_wanderBehaviour;
-	//ArrivalBehaviour *m_arrivalBehaviour;
-	//PursuitBehaviour *m_pursuitBehaviour;
 
-	Path*				m_path;
+	//Path*				m_path;
 	Graph2D*			m_graph;
 	Graph2D::Node*		m_startNode;
 	Graph2D::Node*		m_endNode;
 	Pathfinder*			m_pathfinder;
 
 	std::list<Pos> m_prevPoints;
+	BehaviourManager*	m_steeringmanager;
 
 private:
 

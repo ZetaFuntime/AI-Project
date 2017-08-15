@@ -27,7 +27,7 @@ WanderBehaviour::~WanderBehaviour()
 // website aaron gave to the class.
 // --------------------------------------------------------------
 
-void WanderBehaviour::Update(GameObject *object, float deltaTime)
+void WanderBehaviour::Update(float deltaTime)
 {
 #pragma region Method 1
 	// -----------------------------------------------------------
@@ -66,16 +66,16 @@ void WanderBehaviour::Update(GameObject *object, float deltaTime)
 
 	m_changeTimePassed += deltaTime;
 	
-	m_circleCenter = glm::normalize(object->GetVelocity())*m_forceStrength;
+	m_circleCenter = glm::normalize(GetOwnerVelocity())*m_forceStrength;
 
 	// Every 0.5 second count, apply the changed direction.
 	// Change made to make the 'wander' appear more believable
 	if (m_changeTimePassed > 0.5f)
 	{
-		glm::vec2 currentDir = glm::normalize(object->GetVelocity());
+		glm::vec2 currentDir = glm::normalize(GetOwnerVelocity());
 		float currentAngle = atan2f(currentDir.y, currentDir.x);
 		m_wanderAngle = ((rand() % 314) - 158) / 100.f;
-		m_displacement = SetAngle(object, m_circleRadius, m_wanderAngle + currentAngle);
+		m_displacement = SetAngle(m_circleRadius, m_wanderAngle + currentAngle);
 
 		wanderForce = m_circleCenter + m_displacement;
 		m_changeTimePassed = 0.f;
@@ -87,10 +87,10 @@ void WanderBehaviour::Update(GameObject *object, float deltaTime)
 #pragma endregion
 }
 
-void WanderBehaviour::Draw(GameObject * object, aie::Renderer2D * renderer)
+void WanderBehaviour::Draw(aie::Renderer2D * renderer)
 {
 	if (IsDrawnByGameObject()) {
-		glm::vec2 agentPos = object->GetPosition();
+		glm::vec2 agentPos = GetOwnerPosition();
 		glm::vec2 wanderForce = m_circleCenter + m_displacement;
 
 		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.25f);
@@ -105,7 +105,7 @@ void WanderBehaviour::Draw(GameObject * object, aie::Renderer2D * renderer)
 	}
 }
 
-glm::vec2 WanderBehaviour::SetAngle(GameObject * object, float strength, float wanderAngle)
+glm::vec2 WanderBehaviour::SetAngle(float strength, float wanderAngle)
 {
 	glm::vec2 wanderVector;
 	wanderVector.x = strength * cos(wanderAngle);

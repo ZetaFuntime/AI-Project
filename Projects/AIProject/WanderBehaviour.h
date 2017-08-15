@@ -10,8 +10,8 @@ public:
 	WanderBehaviour();
 	virtual ~WanderBehaviour();
 
-	virtual void Update(GameObject *object, float deltaTime);
-	virtual void Draw(GameObject * object, aie::Renderer2D *renderer);
+	virtual void Update(float deltaTime);
+	virtual void Draw(aie::Renderer2D *renderer);
 
 protected:
 
@@ -26,5 +26,5 @@ protected:
 
 private:
 
-	glm::vec2 SetAngle(GameObject * object, float strength, float wanderAngle);
+	glm::vec2 SetAngle(float strength, float wanderAngle);
 };

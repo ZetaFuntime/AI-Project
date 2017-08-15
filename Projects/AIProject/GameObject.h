@@ -17,8 +17,6 @@ enum ColourPalette
 	PINK = 0xFA22EA, DARKBLUE = 0x012345FF
 };
 
-class BehaviourManager;
-
 class GameObject
 {
 public:
@@ -76,7 +74,5 @@ protected:
 	float m_size;
 
 	aie::Texture*		m_tex;
-	BehaviourManager*	m_steeringmanager;
-
 private:
 };

@@ -11,8 +11,8 @@ public:
 	ArrivalBehaviour();
 	virtual ~ArrivalBehaviour();
 
-	virtual void Update(GameObject *object, float deltaTime);
-	virtual void Draw(GameObject *object, aie::Renderer2D *renderer);
+	virtual void Update(float deltaTime);
+	virtual void Draw(aie::Renderer2D *renderer);
 
 	const glm::vec2 &GetTarget();
 	void SetTarget(const glm::vec2 & target);
