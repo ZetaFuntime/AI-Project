@@ -17,10 +17,10 @@ ArrivalBehaviour::~ArrivalBehaviour()
 
 }
 
-void ArrivalBehaviour::Update(float deltaTime)
+void ArrivalBehaviour::Update(glm::vec2 Pos, glm::vec2 Vel, float deltaTime)
 {
 	float lastDistanceToTarget = glm::length(m_targetPosition - m_lastPosition);
-	float distanceToTarget = glm::length(m_targetPosition - GetOwnerVelocity());
+	float distanceToTarget = glm::length(m_targetPosition - Pos);
 
 	// Have we just entered the target radius
 	if (m_onTargetRadiusEnter && lastDistanceToTarget > m_targetRadius && distanceToTarget <= m_targetRadius)
@@ -31,8 +31,8 @@ void ArrivalBehaviour::Update(float deltaTime)
 
 	// Calculate the current Angle to the destination compared to
 	// the current angle of the agent
-	glm::vec2 currentDir = glm::normalize(GetOwnerVelocity());													
-	glm::vec2 currentDirToTarget = glm::normalize(m_targetPosition - GetOwnerPosition());						
+	glm::vec2 currentDir = glm::normalize(Vel);													
+	glm::vec2 currentDirToTarget = glm::normalize(m_targetPosition - Pos);						
 
 	float currentAngle = atan2f(currentDir.y, currentDir.x);
 	float currentAngleToTarget = atan2f(currentDirToTarget.y, currentDirToTarget.x);
@@ -50,7 +50,7 @@ void ArrivalBehaviour::Update(float deltaTime)
 
 	SetForce(appliedDirToTarget);
 
-	m_lastPosition = GetOwnerPosition();
+	m_lastPosition = Pos;
 }
 
 void ArrivalBehaviour::Draw(aie::Renderer2D *renderer)

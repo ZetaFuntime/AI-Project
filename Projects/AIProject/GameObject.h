@@ -2,6 +2,9 @@
 #include <glm\vec2.hpp>
 #include <vector>
 #include <map>
+
+class BehaviourManager;
+
 namespace aie
 {
 	class Renderer2D;
@@ -43,6 +46,7 @@ public:
 	void SetDraw(bool draw);
 	void SetColour(int id);
 
+
 #pragma endregion
 
 // --------------------------------------------------------
@@ -57,7 +61,7 @@ public:
 	const glm::vec2 & GetVelocity();
 	float GetFriction();
 	ColourPalette GetColour();
-
+	BehaviourManager * GetSteeringManager();
 #pragma endregion
 
 protected:
@@ -74,5 +78,7 @@ protected:
 	float m_size;
 
 	aie::Texture*		m_tex;
+
+	BehaviourManager* m_steeringmanager;
 private:
 };

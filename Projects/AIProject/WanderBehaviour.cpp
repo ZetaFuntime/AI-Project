@@ -27,7 +27,7 @@ WanderBehaviour::~WanderBehaviour()
 // website aaron gave to the class.
 // --------------------------------------------------------------
 
-void WanderBehaviour::Update(float deltaTime)
+void WanderBehaviour::Update(glm::vec2 Pos, glm::vec2 Vel, float deltaTime)
 {
 #pragma region Method 1
 	// -----------------------------------------------------------
@@ -66,13 +66,13 @@ void WanderBehaviour::Update(float deltaTime)
 
 	m_changeTimePassed += deltaTime;
 	
-	m_circleCenter = glm::normalize(GetOwnerVelocity())*m_forceStrength;
+	m_circleCenter = glm::normalize(GetObjectVelocity())*m_forceStrength;
 
 	// Every 0.5 second count, apply the changed direction.
 	// Change made to make the 'wander' appear more believable
 	if (m_changeTimePassed > 0.5f)
 	{
-		glm::vec2 currentDir = glm::normalize(GetOwnerVelocity());
+		glm::vec2 currentDir = glm::normalize(GetObjectVelocity());
 		float currentAngle = atan2f(currentDir.y, currentDir.x);
 		m_wanderAngle = ((rand() % 314) - 158) / 100.f;
 		m_displacement = SetAngle(m_circleRadius, m_wanderAngle + currentAngle);
@@ -90,7 +90,7 @@ void WanderBehaviour::Update(float deltaTime)
 void WanderBehaviour::Draw(aie::Renderer2D * renderer)
 {
 	if (IsDrawnByGameObject()) {
-		glm::vec2 agentPos = GetOwnerPosition();
+		glm::vec2 agentPos = GetObjectPosition();
 		glm::vec2 wanderForce = m_circleCenter + m_displacement;
 
 		renderer->setRenderColour(1.0f, 1.0f, 1.0f, 0.25f);

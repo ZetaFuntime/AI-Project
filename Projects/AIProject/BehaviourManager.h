@@ -47,7 +47,7 @@ public:
 	BehaviourManager();
 	~BehaviourManager();
 
-	virtual void Update(float deltaTime);
+	virtual void Update(glm::vec2 Pos, glm::vec2 Vel, float deltaTime);
 	virtual void Draw(aie::Renderer2D *renderer);
 
 	void SetMaxVelocity(float MaxSpeed);
@@ -57,9 +57,20 @@ public:
 
 	void SetActive(Modes mode);
 	void SetInactive();
+
+	void SetDrawActive();
+
+	void SetDrawInactive();
+
+	void SetSeekTarget(vec2(Target));
+
+	vec2 SetArrivalVelocity();
+
 private:
 
 	vec2 CalculateForce();
+
+	
 
 	ArrivalBehaviour*					m_arrival;
 	WanderBehaviour*					m_wander;
@@ -67,7 +78,7 @@ private:
 	FollowPathBehaviour*				m_follow;
 	KeyboardBehaviour*					m_keyboard;
 
-	//vector<Entity>						m_entitydata;
+	vector<Behaviour*>						m_entitydata;
 
 protected:
 

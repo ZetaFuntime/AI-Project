@@ -20,7 +20,7 @@ Agent::Agent(aie::Texture *tex) :
 	m_endNode(nullptr),
 	m_graph(nullptr)
 {
-	m_steeringmanager = new BehaviourManager;
+
 	//m_seekBehaviour = new SeekBehaviour();
 	//m_seekBehaviour->OnOuterRadiusEnter([this]() {
 	//	m_arrivalBehaviour->SetTarget(m_seekBehaviour->GetTarget());
@@ -56,7 +56,6 @@ Agent::Agent(aie::Texture *tex) :
 Agent::~Agent()
 {
 	//delete m_path;
-	delete m_steeringmanager;
 }
 
 void Agent::Update(float deltaTime)
@@ -70,16 +69,16 @@ void Agent::Update(float deltaTime)
 	// -------------------------------------------------------------
 	if (input->wasKeyPressed(aie::INPUT_KEY_BACKSPACE))
 	{
-		m_steeringmanager->SetInactive();
+		GetSteeringManager()->SetInactive();
 	}
 	// --------------- Seek Behaviour Command ----------------------
 	// Agent will seek towards a given point from the user
 	// -------------------------------------------------------------
-	//if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_LEFT))
-	//{
-	//	m_seekBehaviour->SetSeekTarget(glm::vec2(mX, mY));
-	//	SetBehaviour(m_seekBehaviour);
-	//}
+	if (input->wasMouseButtonPressed(aie::INPUT_MOUSE_BUTTON_LEFT))
+	{
+		GetSteeringManager()->SetActive(SEEK);
+		GetSteeringManager()->SetSeekTarget(glm::vec2(mX, mY));
+	}
 
 	// --------------- Flee Behaviour Command ----------------------
 	// Agent will flee from a given point from the user
@@ -97,7 +96,7 @@ void Agent::Update(float deltaTime)
 
 	if (input->wasKeyPressed(aie::INPUT_KEY_K))
 	{
-		m_steeringmanager->SetActive(KEYBOARD);
+		GetSteeringManager()->SetActive(KEYBOARD);
 	}
 
 	// --------------- Follow Behaviour Command --------------------
@@ -135,34 +134,21 @@ void Agent::Update(float deltaTime)
 	// with the direction being adjusted at random intervals with
 	// random amounts.
 	// -------------------------------------------------------------
-	//else if (input->wasKeyPressed(aie::INPUT_KEY_T))
-	//{
-	//	SetBehaviour(m_wanderBehaviour);
-	//}
-
-	//if (input->wasKeyPressed(aie::INPUT_KEY_UP))
-	//{
-	//	SetDraw(true);
-	//}
-	//
-	//if (input->wasKeyPressed(aie::INPUT_KEY_DOWN))
-	//{
-	//	SetDraw(false);
-	//}
+	else if (input->wasKeyPressed(aie::INPUT_KEY_T))
+	{
+		GetSteeringManager()->SetActive(WANDER);
+	}
 
 	// Update all gameobjects currently in use
 	GameObject::Update(deltaTime);
 
-	// Update Behaviours
-	m_steeringmanager->Update(deltaTime);
-
+	//SetVelocity(GetSteeringManager()->SetArrivalVelocity());
 	// Update the trails left by player objects
 	DoTrailLogic();
 }
 
 void Agent::Draw(aie::Renderer2D *renderer)
 {
-
 
 	// temp rendering for start and end node
 	if (m_startNode != nullptr) renderer->drawCircle(m_startNode->data.x, m_startNode->data.y, 4);

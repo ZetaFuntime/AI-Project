@@ -3,6 +3,7 @@
 #include <Renderer2D.h>
 #include <glm\vec2.hpp>
 #include <glm\glm.hpp>
+#include <iostream>
 
 SeekBehaviour::SeekBehaviour() : 
 	Behaviour(),
@@ -20,20 +21,29 @@ SeekBehaviour::~SeekBehaviour()
 
 }
 
-void SeekBehaviour::Update(float deltaTime)
+void SeekBehaviour::Update(glm::vec2 Pos, glm::vec2 Vel, float deltaTime)
 {
+	glm::vec2 InputForce;
 	float lastDistanceToTarget = glm::length(m_targetPosition - m_lastPosition);
-	float distanceToTarget = glm::length(m_targetPosition - GetOwnerPosition());
+	float distanceToTarget = glm::length(m_targetPosition - Pos);
 
-	if (glm::length(m_targetPosition - GetOwnerPosition()) < m_innerRadius)
+	if (glm::length(m_targetPosition - Pos) < m_innerRadius)
 		m_withinInRadius = true;
-	else if (m_outerRadius < glm::length(m_targetPosition - GetOwnerPosition()) > m_innerRadius)
+	else if (m_outerRadius < glm::length(m_targetPosition - Pos) > m_innerRadius)
 		m_withinOutRadius = true;
-	else if (glm::length(m_targetPosition - GetOwnerPosition()) > m_outerRadius)
+	else if (glm::length(m_targetPosition - Pos) > m_outerRadius){
+		m_withinInRadius = false;
+		m_withinOutRadius = false;
+	}
 
-	SetForce(glm::normalize(m_targetPosition - GetOwnerPosition()) * m_forceStrength);
 
-	m_lastPosition = GetOwnerPosition();
+	InputForce = glm::normalize(m_targetPosition - Pos) * m_forceStrength;
+
+	SetForce(InputForce);
+	m_lastPosition = Pos;
+
+	if (m_withinInRadius)
+		IsActive(false);
 }
 
 void SeekBehaviour::Draw(aie::Renderer2D *renderer)

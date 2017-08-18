@@ -11,7 +11,7 @@ public:
 	SeekBehaviour();
 	virtual ~SeekBehaviour();
 
-	virtual void Update(float deltaTime);
+	virtual void Update(glm::vec2 Pos, glm::vec2 Vel, float deltaTime);
 	virtual void Draw(aie::Renderer2D *renderer);
 
 	const glm::vec2 &GetTarget();

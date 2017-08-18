@@ -17,7 +17,7 @@ GameObject::GameObject(aie::Texture *tex) :
 	isDrawn(true),
 	m_colour(WHITE)
 {
-
+	m_steeringmanager = new BehaviourManager();
 }
 
 GameObject::~GameObject()
@@ -28,11 +28,17 @@ GameObject::~GameObject()
 void GameObject::Update(float deltaTime)
 {
 	SimulatePhysics(deltaTime);
+
+	m_steeringmanager->Update(m_position, m_velocity, deltaTime);
+
+	ApplyForce(m_steeringmanager->ReturnForce());
 }
 
 void GameObject::Draw(aie::Renderer2D * renderer)
 {
 	glm::vec2 targetHeading = m_position + m_velocity;
+
+	m_steeringmanager->Draw(renderer);
 
 	if (isDrawn){
 		renderer->setRenderColour(ORANGE);
@@ -142,4 +148,9 @@ void GameObject::SetColour(int id)
 	case DARKBLUE:	m_colour = DARKBLUE;	break;
 	default:								break;
 	}
+}
+
+BehaviourManager* GameObject::GetSteeringManager()
+{
+	return m_steeringmanager;
 }
